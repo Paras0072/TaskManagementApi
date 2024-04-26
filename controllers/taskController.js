@@ -20,3 +20,12 @@ exports.createTask = async (req, res) => {
     res.status(400).json({ status: "error", message: err.message });
   }
 };
+
+exports.getAllTasks = async (req, res) => {
+  try {
+    const tasks = await Task.find();
+    res.status(200).json({ status: "success", data: { tasks } });
+  } catch (err) {
+    res.status(500).json({ status: "error", message: err.message });
+  }
+};
