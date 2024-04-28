@@ -7,9 +7,13 @@ const taskSchema = new mongoose.Schema({
   creationDate: { type: Date, default: Date.now },
   status: {
     type: String,
-    enum: ["pending", "in progress", "completed"],
+    enum: ["todo", "pending", "in progress", "completed", "Overdue"],
     default: "pending",
   },
+  tags: { type: String, required: true },
+  priority: { type: String, required: true },
+  purpose: { type: String, required: true },
+  assignees: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 const Task = mongoose.model("Task", taskSchema);
