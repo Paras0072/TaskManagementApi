@@ -1,5 +1,7 @@
+const mongoose = require("mongoose");
 const Task = require("../models/Task");
 const Project = require("../models/Project");
+
 exports.createTask = async (req, res) => {
   try {
     const { projectId } = req.params;
@@ -16,6 +18,7 @@ exports.createTask = async (req, res) => {
     if (!project) {
       throw new Error("Project not found. Add project first, then add task.");
     }
+
     // Validate input data
 
     if (!req.body.title || !req.body.description) {
@@ -39,11 +42,19 @@ exports.createTask = async (req, res) => {
         lastAddedId: lastAddedTask ? lastAddedTask.taskId : null,
       });
     } else {
+      // Add projectId to the request body
+      // req.body.project = projectId;
       // Create task
       const task = await Task.create(req.body);
+
       // Add task to project
-      project.tasks.push(task._id);
-      await project.save();
+      // project.tasks.push(task._id);
+      // await project.save();
+      const project = await Project.findOneAndUpdate(
+        { projectId: projectId },
+        { $push: { tasks: task._id } },
+        { new: true }
+      );
 
       res.status(201).json({
         status: "success",
@@ -111,6 +122,68 @@ exports.updateTask = async (req, res) => {
     res.status(200).json({ status: "success", data: { task } });
   } catch (err) {
     // Handle errors
+    res.status(500).json({ status: "error", message: err.message });
+  }
+};
+
+exports.deleteTask = async (req, res) => {
+  try {
+    const { projectId, taskId } = req.params;
+
+    // Find the project with the given projectId and check if the task is included in its tasks array
+    const project = await Project.findOne({
+      projectId: projectId,
+    })
+      .populate("tasks")
+      .exec();
+   
+    if (!project) {
+      return res.status(404).json({
+        status: "error",
+        message: "Project not found ",
+      });
+    } else {
+      //  Step 1: Delete the task document from the Task collection
+      const task = await Task.findOneAndDelete({ taskId });
+
+      if (!task) {
+        return res.status(404).json({
+          status: "error",
+          message: "Task not found in the specified project",
+        });
+      }
+      // Task found, handle accordingly (e.g., return task details)
+      return res.status(200).json({
+        status: "success",
+        data: { task },
+        message: "Task deleted from project and Task collection",
+      });
+    }
+    
+
+   
+
+    
+
+    
+    // // Step 2: Remove the reference to the deleted task from the tasks array in the Project collection
+
+    // // const project = await Project.findOneAndUpdate(
+    // //   { projectId: projectId },
+    // //   { $pull: { tasks: task._id } },
+    // //   { new: true }
+    // // );
+    // if (!project) {
+    //   return res
+    //     .status(404)
+    //     .json({ status: "error", message: "Project not found" });
+    // } else
+    //   return res.status(204).json({
+    //     status: "success",
+    //     data: null,
+    //     message: "Task deleted from project and Task collection",
+    //   });
+  } catch (err) {
     res.status(500).json({ status: "error", message: err.message });
   }
 };
