@@ -66,99 +66,99 @@ exports.createTask = async (req, res) => {
     res.status(400).json({ status: "error", message: err.message });
   }
 };
-exports.getAllTasks = async (req, res) => {
-  try {
-    const tasks = await Task.find();
-    res.status(200).json({ status: "success", data: { tasks } });
-  } catch (err) {
-    res.status(500).json({ status: "error", message: err.message });
-  }
-};
+// exports.getAllTasks = async (req, res) => {
+//   try {
+//     const tasks = await Task.find();
+//     res.status(200).json({ status: "success", data: { tasks } });
+//   } catch (err) {
+//     res.status(500).json({ status: "error", message: err.message });
+//   }
+// };
 
-exports.getTaskById = async (req, res) => {
-  try {
-    // Find task by ID
-    const task = await Task.findOne({ taskId: req.params.id });
-    console.log(req.params.id);
-    // Check if task exists
-    if (!task) {
-      return res
-        .status(404)
-        .json({ status: "error", message: "Task not found" });
-    }
-    // Task found, return it
-    res.status(200).json({ status: "success", data: { task } });
-  } catch (err) {
-    // Handle errors
-    res.status(500).json({ status: "error", message: err.message });
-  }
-};
-exports.updateTask = async (req, res) => {
-  try {
-    // Validate input data
-    if (!req.body.title && !req.body.description) {
-      return res.status(400).json({
-        status: "error",
-        message:
-          "At least one field (title or description) is required for updating task",
-      });
-    }
+// exports.getTaskById = async (req, res) => {
+//   try {
+//     // Find task by ID
+//     const task = await Task.findOne({ taskId: req.params.id });
+//     console.log(req.params.id);
+//     // Check if task exists
+//     if (!task) {
+//       return res
+//         .status(404)
+//         .json({ status: "error", message: "Task not found" });
+//     }
+//     // Task found, return it
+//     res.status(200).json({ status: "success", data: { task } });
+//   } catch (err) {
+//     // Handle errors
+//     res.status(500).json({ status: "error", message: err.message });
+//   }
+// };
+// exports.updateTask = async (req, res) => {
+//   try {
+//     // Validate input data
+//     if (!req.body.title && !req.body.description) {
+//       return res.status(400).json({
+//         status: "error",
+//         message:
+//           "At least one field (title or description) is required for updating task",
+//       });
+//     }
 
-    // Update task by taskId
-    const task = await Task.findOneAndUpdate(
-      { taskId: req.params.id },
-      req.body,
-      { new: true }
-    );
+//     // Update task by taskId
+//     const task = await Task.findOneAndUpdate(
+//       { taskId: req.params.id },
+//       req.body,
+//       { new: true }
+//     );
 
-    // Check if task exists
-    if (!task) {
-      return res
-        .status(404)
-        .json({ status: "error", message: "Task not found" });
-    }
+//     // Check if task exists
+//     if (!task) {
+//       return res
+//         .status(404)
+//         .json({ status: "error", message: "Task not found" });
+//     }
 
-    // Task updated, return it
-    res.status(200).json({ status: "success", data: { task } });
-  } catch (err) {
-    // Handle errors
-    res.status(500).json({ status: "error", message: err.message });
-  }
-};
+//     // Task updated, return it
+//     res.status(200).json({ status: "success", data: { task } });
+//   } catch (err) {
+//     // Handle errors
+//     res.status(500).json({ status: "error", message: err.message });
+//   }
+// };
 
-exports.deleteTask = async (req, res) => {
-  try {
-    const { projectId, taskId } = req.params;
+// exports.deleteTask = async (req, res) => {
+//   try {
+//     const { projectId, taskId } = req.params;
 
-    // Find the project with the given projectId and check if the task is included in its tasks array
-    const project = await Project.findOne({
-      projectId: projectId,
-    })
-      .populate("tasks")
-      .exec();
+//     // Find the project with the given projectId and check if the task is included in its tasks array
+//     const project = await Project.findOne({
+//       projectId: projectId,
+//     })
+//       .populate("tasks")
+//       .exec();
    
-    if (!project) {
-      return res.status(404).json({
-        status: "error",
-        message: "Project not found ",
-      });
-    } else {
-      //  Step 1: Delete the task document from the Task collection
-      const task = await Task.findOneAndDelete({ taskId });
+//     if (!project) {
+//       return res.status(404).json({
+//         status: "error",
+//         message: "Project not found ",
+//       });
+//     } else {
+//       //  Step 1: Delete the task document from the Task collection
+//       const task = await Task.findOneAndDelete({ taskId });
 
-      if (!task) {
-        return res.status(404).json({
-          status: "error",
-          message: "Task not found in the specified project",
-        });
-      }
-      // Task found, handle accordingly (e.g., return task details)
-      return res.status(200).json({
-        status: "success",
-        data: { task },
-        message: "Task deleted from project and Task collection",
-      });
-    }
+//       if (!task) {
+//         return res.status(404).json({
+//           status: "error",
+//           message: "Task not found in the specified project",
+//         });
+//       }
+//       // Task found, handle accordingly (e.g., return task details)
+//       return res.status(200).json({
+//         status: "success",
+//         data: { task },
+//         message: "Task deleted from project and Task collection",
+//       });
+//     }
     
 
    
@@ -166,24 +166,24 @@ exports.deleteTask = async (req, res) => {
     
 
     
-    // // Step 2: Remove the reference to the deleted task from the tasks array in the Project collection
+//     // // Step 2: Remove the reference to the deleted task from the tasks array in the Project collection
 
-    // // const project = await Project.findOneAndUpdate(
-    // //   { projectId: projectId },
-    // //   { $pull: { tasks: task._id } },
-    // //   { new: true }
-    // // );
-    // if (!project) {
-    //   return res
-    //     .status(404)
-    //     .json({ status: "error", message: "Project not found" });
-    // } else
-    //   return res.status(204).json({
-    //     status: "success",
-    //     data: null,
-    //     message: "Task deleted from project and Task collection",
-    //   });
-  } catch (err) {
-    res.status(500).json({ status: "error", message: err.message });
-  }
-};
+//     // // const project = await Project.findOneAndUpdate(
+//     // //   { projectId: projectId },
+//     // //   { $pull: { tasks: task._id } },
+//     // //   { new: true }
+//     // // );
+//     // if (!project) {
+//     //   return res
+//     //     .status(404)
+//     //     .json({ status: "error", message: "Project not found" });
+//     // } else
+//     //   return res.status(204).json({
+//     //     status: "success",
+//     //     data: null,
+//     //     message: "Task deleted from project and Task collection",
+//     //   });
+//   } catch (err) {
+//     res.status(500).json({ status: "error", message: err.message });
+//   }
+// };
