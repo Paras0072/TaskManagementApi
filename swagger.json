@@ -1,0 +1,214 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Project Management API",
+    "description": "API documentation for Project Management System"
+  },
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "Endpoints related to user authentication"
+    },
+    {
+      "name": "Projects",
+      "description": "Endpoints related to project management"
+    },
+    {
+      "name": "Tasks",
+      "description": "Endpoints related to task management"
+    }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Register a new user",
+        "parameters": [
+          {
+            "name": "User",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "confirmpassword": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User registered successfully"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Login user",
+        "parameters": [
+          {
+            "name": "Credentials",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User logged in successfully"
+          }
+        }
+      }
+    },
+    "/projects": {
+      "post": {
+        "tags": ["Projects"],
+        "summary": "Create a new project",
+        "parameters": [
+          {
+            "name": "Project",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "projectId": {
+                  "type": "string"
+                },
+                "projectName": {
+                  "type": "string"
+                },
+                "purpose": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Project created successfully"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}": {
+      "get": {
+        "tags": ["Projects"],
+        "summary": "Get project by ID",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "projectId": {
+                  "type": "string"
+                },
+                "projectName": {
+                  "type": "string"
+                },
+                "purpose": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Project not found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Projects"],
+        "summary": "Update project by ID",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Project",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "projectName": {
+                  "type": "string"
+                },
+                "purpose": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project updated successfully"
+          },
+          "404": {
+            "description": "Project not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Projects"],
+        "summary": "Delete project by ID",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project deleted successfully"
+          },
+          "404": {
+            "description": "Project not found"
+          }
+        }
+      }
+    }
+   
+}
+}

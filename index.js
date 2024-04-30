@@ -8,11 +8,17 @@ const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes")
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json"); // Path to your swagger.json file
+
 const cors = require("cors");
 dotenv.config();
 const { isAuth } = require("./services/common");
 // const path = require("path");
 const app = express();
+// Serve Swagger UI at /api-docs route
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// Start the server and navigate to http://localhost:<PORT>/api-docs to view the Swagger documentation.
 // Enable CORS for all requests
 app.use(cors());
 
@@ -58,8 +64,11 @@ const PORT = process.env.PORT || 3000;
 // listening to the port 3000;
 app.listen(PORT, (err) => {
   if (err) {
-    console.log("error in starting the server", err);
+     console.log("error in starting the server", err);
     return;
   }
-  console.log(`Server running on port ${PORT}`);
+   console.log(`Server running on port ${PORT}`);
 });
+
+
+module.exports = app;
