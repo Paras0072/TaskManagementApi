@@ -14,7 +14,7 @@ router
   .post("/", createProject)
   .get("/", getAllProjects)
   .get("/:projectId", getProjectById)
-  .put("/:projectId", updateProject);
+  .put("/:projectId", updateProject)
   .delete("/:projectId", deleteProject);
 
 module.exports = router;
