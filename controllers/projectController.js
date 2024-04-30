@@ -19,6 +19,7 @@ exports.createProject = async (req, res) => {
     const existingProject = await Project.findOne({
       user: userId,
       projectId,
+      projectName
     });
 
     // Find the ID of the last added project
@@ -56,7 +57,7 @@ exports.getAllProjects = async (req, res) => {
     const userId = req.user.id; // Assuming user is authenticated
     const projects = await Project.find({ user: userId });
     res.json({ status: "success", data: projects });
-  } catch {
+  } catch(error) {
     console.error("Error fetching projects:", error);
     res
       .status(500)
@@ -70,7 +71,7 @@ exports.getProjectById = async (req, res) => {
     const projectId = req.params.projectId;
     // Find the project by ID and check if it belongs to the authenticated user
     const project = await Project.findOne({
-      _id: projectId,
+      projectId, 
       user: userId,
     });
     if (!project) {
@@ -79,7 +80,7 @@ exports.getProjectById = async (req, res) => {
         .json({ status: "error", message: "Project not found" });
     }
     res.json({ status: "success", data: project });
-  } catch {
+  } catch (error){
     console.error("Error fetching project by ID:", error);
     res
       .status(500)
@@ -91,8 +92,8 @@ exports.deleteProject = async (req, res) => {
     const userId = req.user.id; // Assuming user is authenticated
     const projectId = req.params.projectId;
     // Find the project by ID and check if it belongs to the authenticated user
-    const project = await Project.findOne({
-      _id: projectId,
+    const project = await Project.findOneAndDelete({
+      projectId,
       user: userId,
     });
     if (!project) {
@@ -100,15 +101,15 @@ exports.deleteProject = async (req, res) => {
         .status(404)
         .json({ status: "error", message: "Project not found" });
     }
-    await project.remove();
+
 
     // Remove project reference from user's project array
     await User.findByIdAndUpdate(userId, {
-      $pull: { projects: projectId },
+      $pull: { projects: project._id },
     });
 
     res.json({ status: "success", message: "Project deleted successfully" });
-  } catch {
+  } catch (error){
     console.error("Error deleting project by ID:", error);
     res
       .status(500)

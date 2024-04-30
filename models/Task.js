@@ -13,10 +13,10 @@ const taskSchema = new mongoose.Schema({
   tags: { type: String, required: true },
   priority: { type: String, required: true },
   purpose: { type: String, required: true },
-  duedate:{type: Date, default: Date.now },
-  projectId: { type: String, },
+  duedate: { type: Date, default: Date.now },
+  projectId: { type: String },
   assignees: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
- 
+  projectId: { type: String, unique: true },
 });
 
 const Task = mongoose.model("Task", taskSchema);
