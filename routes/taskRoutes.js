@@ -7,7 +7,7 @@ const {
   updateTask,
   deleteTask,
 } = require("../controllers/taskController");
-
+// /projects/task already in base path
 router.post("/:projectId", createTask)
       .get("/:projectId", getAllTasks)
       .get("/:projectId/:taskId", getTaskById)

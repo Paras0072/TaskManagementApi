@@ -1,5 +1,5 @@
 const express = require("express");
-const { passport } = require("./config/passport");
+const { passport } = require("./config/passport"); // for athentication
 const session = require("express-session");
 const dotenv = require("dotenv");
 const taskRoutes = require("./routes/taskRoutes");
@@ -8,12 +8,12 @@ const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes")
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-const swaggerUi = require("swagger-ui-express");
+const swaggerUi = require("swagger-ui-express"); /// for swagger api testing
 const swaggerDocument = require("./swagger.json"); // Path to your swagger.json file
-
-const cors = require("cors");
-dotenv.config();
 const { isAuth } = require("./services/common");
+const cors = require("cors"); // for connecting to frontend
+dotenv.config();
+
 // const path = require("path");
 const app = express();
 // Serve Swagger UI at /api-docs route
@@ -46,8 +46,6 @@ app.use(bodyParser.json());
 
 // Parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
-
-
 
 
 // Initialize Passport middleware

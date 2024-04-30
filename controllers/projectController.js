@@ -35,7 +35,7 @@ exports.createProject = async (req, res) => {
       });
     }
 
-    // Create task
+    // Create Project
     const project = await Project.create({ ...req.body, user: userId });
     // Save project to database
     await project.save();
@@ -55,7 +55,7 @@ exports.createProject = async (req, res) => {
 exports.getAllProjects = async (req, res) => {
   try {
     const userId = req.user.id; // Assuming user is authenticated
-    const projects = await Project.find({ user: userId });
+    const projects = await Project.find({ user: userId }); // getting all projects
     res.json({ status: "success", data: projects });
   } catch(error) {
     console.error("Error fetching projects:", error);
@@ -87,11 +87,48 @@ exports.getProjectById = async (req, res) => {
       .json({ status: "error", message: "Failed to fetch project" });
   }
 };
+exports.updateProject = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const userId = req.user.id; // Assuming user is authenticated
+    // Validate input data
+    if (!req.body.projectName && !req.body.purpose) {
+      return res.status(400).json({
+        status: "error",
+        message:
+          "At least one field (projectName or purpose) is required for updating Project",
+      });
+    }
+
+    // Update project by projectId
+    const project = await Project.findOneAndUpdate(
+      { projectId, user: userId },
+      req.body,
+      {
+        new: true,
+      }
+    );
+
+    // Check if task exists
+    if (!project) {
+      return res
+        .status(404)
+        .json({ status: "error", message: "Project not found" });
+    }
+
+    // Task updated, return it
+    res.status(200).json({ status: "success", data: { project } });
+  } catch (err) {
+    // Handle errors
+    res.status(500).json({ status: "error", message: err.message });
+  }
+};
+
 exports.deleteProject = async (req, res) => {
   try {
     const userId = req.user.id; // Assuming user is authenticated
     const projectId = req.params.projectId;
-    // Find the project by ID and check if it belongs to the authenticated user
+    // Find the project by ID and check if it belongs to the authenticated user Amd Delete it
     const project = await Project.findOneAndDelete({
       projectId,
       user: userId,

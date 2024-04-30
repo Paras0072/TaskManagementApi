@@ -9,7 +9,7 @@ const {
   //   resetPasswordRequest,
   //   resetPassword,
 } = require("../controllers/authController");
-
+// /auth is already in base path
 router
   .post("/register", createUser)
   .post("/login", passport.authenticate("local"), loginUser)

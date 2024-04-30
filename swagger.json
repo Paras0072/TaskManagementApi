@@ -29,29 +29,20 @@
           {
             "name": "User",
             "in": "body",
+            "description": "User object containing username, email, password and confirm password",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "username": {
-                  "type": "string"
-                },
-                "email": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
-                },
-                "confirmpassword": {
-                  "type": "string"
-                }
-              }
+                 "$ref": "#/definitions/User"
+             
             }
           }
         ],
         "responses": {
           "200": {
             "description": "User registered successfully"
+          },
+          "400": {
+            "description": "Invalid request body"
           }
         }
       }
@@ -59,7 +50,7 @@
     "/auth/login": {
       "post": {
         "tags": ["Authentication"],
-        "summary": "Login user",
+        "summary": "Login with username and password",
         "parameters": [
           {
             "name": "Credentials",
@@ -81,6 +72,9 @@
         "responses": {
           "200": {
             "description": "User logged in successfully"
+          },
+          "401": {
+            "description": "Unauthorized: Incorrect username or password"
           }
         }
       }
@@ -113,6 +107,24 @@
         "responses": {
           "201": {
             "description": "Project created successfully"
+          },
+          "400": {
+            "description": "Invalid request body"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Projects"],
+        "summary": "Get all projects",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Project"
+              }
+            }
           }
         }
       }
@@ -208,7 +220,236 @@
           }
         }
       }
+    },
+    "/projects/task/{projectId}": {
+      "post": {
+        "tags": ["Tasks"],
+        "summary": "Create a task for a project",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "ID of the project to which the task belongs",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Task object containing title, description, status, tags, priority, purpose, and assignees",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Task"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Task created successfully"
+          },
+          "400": {
+            "description": "Invalid request body"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Tasks"],
+        "summary": "Get all tasks for a project",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "ID of the project to retrieve tasks for",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Task"
+              }
+            }
+          },
+          "404": {
+            "description": "Project not found"
+          }
+        }
+      }
+    },
+    "/projects/task/{projectId}/{taskId}": {
+      "get": {
+        "tags": ["Tasks"],
+        "summary": "Get task by ID for a project",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "ID of the project to which the task belongs",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "taskId",
+            "in": "path",
+            "description": "ID of the task",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "404": {
+            "description": "Task not found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Tasks"],
+        "summary": "Update task by ID for a project",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "ID of the project to which the task belongs",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "taskId",
+            "in": "path",
+            "description": "ID of the task",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Updated task object containing title, description, status, tags, priority, purpose, and assignees",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Task"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Task updated successfully"
+          },
+          "400": {
+            "description": "Invalid request body"
+          },
+          "404": {
+            "description": "Task not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Tasks"],
+        "summary": "Delete task by ID for a project",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "ID of the project to which the task belongs",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "taskId",
+            "in": "path",
+            "description": "ID of the task",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Task deleted successfully"
+          },
+          "404": {
+            "description": "Task not found"
+          }
+        }
+      }
     }
-   
+  },
+ 
+            
+              
+"definitions": {
+    "Task": {
+      "type": "object",
+      "properties": {
+        " taskId": {
+        "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["todo", "pending", "in progress", "completed", "overdue"]
+        },
+        "tags": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "string"
+        },
+        "purpose": {
+          "type": "string"
+        },
+        
+                 "duedate": {
+                   "type": "string",
+                   "format": "date-time"
+                 }
+       
+      }
+    }, 
+    "Project": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "type": "string"
+        },
+        "projectName": {
+          "type": "string"
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "creationDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "User":{
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "confirmpassword": {
+          "type": "string"
+        }
+      }
+    }
 }
 }

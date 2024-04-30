@@ -50,6 +50,8 @@ passport.use(
     }
   )
 );
+
+// Jwt Strategy
 passport.use(
   "jwt",
   new JwtStrategy(opts, async function (jwt_payload, done) {

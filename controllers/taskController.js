@@ -68,7 +68,7 @@ exports.getAllTasks = async (req, res) => {
   try {
     const projectId = req.params.projectId;
 
-    const tasks = await Task.find({ projectId });
+    const tasks = await Task.find({ projectId }); // get all tasks
     res.status(200).json({ status: "success", data: { tasks } });
   } catch (err) {
     res.status(500).json({ status: "error", message: err.message });
@@ -80,7 +80,7 @@ exports.getTaskById = async (req, res) => {
     // Find task by ID
     const { taskId, projectId } = req.params;
 
-    const task = await Task.findOne({ taskId, projectId });
+    const task = await Task.findOne({ taskId, projectId }); // finding task by id in project
 
     // Check if task exists
     if (!task) {

@@ -2,9 +2,9 @@ const User = require("../models/User");
 const { passport, hashPassword } = require("../config/passport");
 const crypto = require("crypto");
 const { sanitizeUser } = require("../services/common");
-
 const jwt = require("jsonwebtoken");
 
+// for creating user and store the hashed password
 exports.createUser = async (req, res) => {
   try {
     const { username, email, password, confirmpassword } = req.body;
@@ -19,6 +19,7 @@ exports.createUser = async (req, res) => {
       keyLength,
       digest,
       async function (err, hashedPassword) {
+        // matching the password
         if (password !== confirmpassword) {
           return res.status(400).json({ message: "Passwords do not match" });
         }
@@ -29,9 +30,8 @@ exports.createUser = async (req, res) => {
           return res.status(400).json({ message: "email already exists" });
         }
 
-        //  // Hash the password
-        //  const hashedPassword = hashPassword(password);
-
+      
+    // creating user with hashed password
         const user = new User({
           ...req.body,
           password: hashedPassword,
@@ -64,6 +64,8 @@ exports.createUser = async (req, res) => {
     res.status(400).json(err);
   }
 };
+
+// login user
 exports.loginUser = async (req, res) => {
   const user = req.user;
   res
