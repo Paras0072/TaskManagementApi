@@ -6,6 +6,7 @@ const projectSchema = new mongoose.Schema({
   purpose: { type: String, required: true },
   creationDate: { type: Date, default: Date.now },
   tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
+  user: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 const Project= mongoose.model("Project", projectSchema);
