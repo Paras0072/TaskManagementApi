@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema(
     username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: Buffer, required: true },
-    password: { type: Buffer, required: true },
+    confirmpassword: { type: Buffer, required: true },
     role: { type: String, required: true, default: "user" },
     salt: { type: Buffer },
     resetPasswordToken: { type: String, default: "" },

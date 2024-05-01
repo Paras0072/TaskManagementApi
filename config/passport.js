@@ -1,5 +1,6 @@
 const passport = require("passport");
 const dotenv = require("dotenv");
+dotenv.config();
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -11,7 +12,7 @@ const {  sanitizeUser, cookieExtractor } = require("../services/common");
 // Configure local strategy for passport
 const opts = {};
 opts.jwtFromRequest = cookieExtractor;
-opts.secretOrKey = "SECRET_KEY";
+opts.secretOrKey = process.env.JWT_SECRET_KEY;
 
 
 // Passport Strategy
@@ -37,10 +38,11 @@ passport.use(
           32,
           "sha256",
           async function (err, hashedPassword) {
-            if (!crypto.timingSafeEqual(user.password, hashedPassword)) {
-              return done(null, false, { message: "Invalid Credentials" });
-            }
-            const token = jwt.sign(sanitizeUser(user), "SECRET_KEY");
+            
+            const token = jwt.sign(
+              sanitizeUser(user),
+              process.env.JWT_SECRET_KEY,
+            );
             done(null, { id: user.id, role: user.role, token }); // this line sends to serializer
           }
         );
