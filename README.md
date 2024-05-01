@@ -1,17 +1,56 @@
+Task management system developed using Node.js ,Express,MongoDb as database
  # Task Management System 
 
- This project is a Task management system that allows users to create projects and manage tasks within those projects.
- 
- # Setup Instructions
- 
- 1. Clone the repository to your local machine: git clone <repository-url>
- 2. Install dependencies: npm install
- 3. PORT=3000 &
-    MONGODB_URI=mongodb://localhost:27017/project_management
- 4. Start the server: npm start
+ Welcome to the Task management ! This API is designed to provide the backend functionality for an task management platform, allowing users to create projects and manage tasks within those projects.
 
- #  API Endpoints
- ## User Authentication
+## Table of Contents
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+- [Usage](#usage)
+  - [Endpoints](#endpoints)
+  - [Authentication](#authentication)
+- [Models](#models)
+- [Contributing](#contributing)
+- [License](#license)
+
+
+## Getting Started
+
+### Prerequisites
+Make sure you have the following installed before running the API:
+- [Node.js](https://nodejs.org/)
+- MongoDb or firebase for storing data
+
+
+### Installation
+1. Clone the repository:
+   git clone https://github.com/your-username/TaskManagementApi.git
+Install dependencies:
+
+npm install
+
+
+### Configuration
+Configure your MongoDb database settings in congif/mongoose.js
+ MONGODB_URI=mongodb://localhost:27017/project_management
+
+Configure your Jwt secret key in config/passport.js
+JWT_SECRET_KEY = Your-secret-Key
+
+Configure your Jwt secret key in index.js
+SESSION_SECRET_KEY = Your-secret-Key
+  
+### Starting the server
+
+ Start the server: npm start
+
+ ###  Usage
+ ##  Endpoints
+The API provides the following endpoints:
+
+ # User Authentication
  ### Register User
  
  * URL: `/auth/register`
@@ -54,7 +93,7 @@
   "status": "success",
   "message": "<JWT_TOKEN>"
 }
- ## Project Management
+ # Project Management
  ### Create Project
 
   * URL:/projects
@@ -140,7 +179,7 @@
   "message": "Project deleted successfully"
 }
 
-## Task Management
+# Task Management
 ### Create Task
   * URL:/projects/task/:projectId
   
@@ -236,4 +275,25 @@
   "status": "success",
   "message": "Task deleted successfully"
 }
+
+## Authentication
+Authentication is required for certain endpoints. Use your preferred authentication method (JWT, OAuth, etc.) and secure sensitive endpoints.
+After login a token get generated put that token into the header section of request as 
+key  :x-auth-token 
+value:generated token value
+### Models
+The API uses the following Sequelize models:
+
+User
+Project
+Task
+
+Ensure to check the models and associations for database structure details.
+
+### Contributing
+Contributions are welcome! Feel free to open issues or submit pull requests.
+
+### License
+This project is licensed under the MIT License.
+This README provides a starting point for users and contributors to understand the project structure, installation process, and available endpoints. Customize it further based on your specific project features and details.
 
