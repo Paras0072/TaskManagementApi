@@ -278,9 +278,9 @@ The API provides the following endpoints:
 
 ## Authentication
 Authentication is required for certain endpoints. Use your preferred authentication method (JWT, OAuth, etc.) and secure sensitive endpoints.
-After login a token get generated put that token into the header section of request as 
-key  :x-auth-token 
-value:generated token value
+After login a token get generated put that token into the Authorization section of request as 
+Type : Bearer Token 
+value: generated token
 ### Models
 The API uses the following Sequelize models:
 
